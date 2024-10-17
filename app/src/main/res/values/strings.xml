@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">PrimeiroApp</string>
+    <string name="tittle">Contador de mortes</string>
+    <string name="death_counter">0</string>
+    <string name="skull_image_description">Skull with 2 bones</string>
+    <string name="btn_add">+</string>
+    <string name="btn_undo">-</string>
+    <string name="btn_restart">*</string>
+    <string name="deaths_on_cards">Mortes:</string>
+    <string name="delete">Deletar</string>
+    <string name="save">Salvar</string>
+    <string name="deaths">Mortes</string>
+    <string name="game_name">Nome do jogo</string>
+
+</resources>
