@@ -16,7 +16,7 @@
             android:name="com.example.death_counter.CreateOrEditGame"
             android:exported="false" />
         <activity
-            android:name="com.example.death_counter.game_selector"
+            android:name="com.example.death_counter.GameSelector"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

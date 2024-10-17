@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.death_counter.com.death_counter.common.GamesDatabase
-import com.example.death_counter.game_selector
+import com.example.death_counter.GameSelector
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     private val returnButton: Button by lazy { findViewById(R.id.return_to_games) }
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         nome.text = deathNumber.toString()
     }
     private fun returnToGamesList() {
-        val intent = Intent(this, game_selector::class.java)
+        val intent = Intent(this, GameSelector::class.java)
         startActivity(intent)
     }
     private fun setGame() {

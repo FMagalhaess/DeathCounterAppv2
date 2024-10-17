@@ -15,7 +15,7 @@ import com.example.death_counter.com.death_counter.common.GamesDatabase
 import com.example.primeiroapp.MainActivity
 import com.example.primeiroapp.R
 
-class game_selector : AppCompatActivity(), View.OnClickListener {
+class GameSelector : AppCompatActivity(), View.OnClickListener {
 
     private val gamesList: RecyclerView by lazy { findViewById(R.id.selectGame) }
     private val addGameToList: Button by lazy { findViewById(R.id.add_game_to_list) }

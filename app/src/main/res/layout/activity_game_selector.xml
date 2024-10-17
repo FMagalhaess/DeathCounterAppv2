@@ -5,7 +5,7 @@
     android:id="@+id/back_to_previous"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.death_counter.game_selector">
+    tools:context="com.example.death_counter.GameSelector">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"

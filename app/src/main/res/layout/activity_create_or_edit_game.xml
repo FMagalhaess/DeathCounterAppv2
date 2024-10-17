@@ -8,7 +8,7 @@
     tools:context="com.example.death_counter.CreateOrEditGame">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/deaths_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -21,6 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/deaths_input_text_field"
             android:layout_width="match_parent"
             android:layout_height="56dp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -59,16 +60,18 @@
         tools:visibility="invisible" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/game_name_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+        app:layout_constraintBottom_toTopOf="@+id/deaths_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/game_name_input_text_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/game_name" />
