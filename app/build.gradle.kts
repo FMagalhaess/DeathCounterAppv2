@@ -43,6 +43,9 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
+//    implementation("com.google.android.gms:play-services-ads:23.4.0")
+
+
     // Remover ou comentar as dependências de teste
     // testImplementation(libs.junit)
     // androidTestImplementation(libs.androidx.junit)

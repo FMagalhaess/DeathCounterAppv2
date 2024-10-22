@@ -19,6 +19,7 @@ class GameSelector : AppCompatActivity(), View.OnClickListener {
 
     private val gamesList: RecyclerView by lazy { findViewById(R.id.selectGame) }
     private val addGameToList: Button by lazy { findViewById(R.id.add_game_to_list) }
+    private val closeActivity: Button by lazy { findViewById(R.id.return_button_game_selector) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -29,8 +30,9 @@ class GameSelector : AppCompatActivity(), View.OnClickListener {
             insets
         }
         addGameToList.setOnClickListener(this)
+        closeActivity.setOnClickListener(this)
 
-        gamesList.setPadding(0, 0, 0, 320)
+        gamesList.setPadding(0, 140, 0, 640)
         gamesList.clipToPadding = false
         val games = GamesDatabase.getAll()
         gamesList.layoutManager = LinearLayoutManager(baseContext)
@@ -55,6 +57,7 @@ class GameSelector : AppCompatActivity(), View.OnClickListener {
                 val intent = Intent(this, CreateOrEditGame::class.java)
                 startActivity(intent)
             }
+            R.id.return_button_game_selector -> finish()
         }
     }
 }

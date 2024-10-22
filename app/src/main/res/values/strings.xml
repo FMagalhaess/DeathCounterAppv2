@@ -11,5 +11,7 @@
     <string name="save">Salvar</string>
     <string name="deaths">Mortes</string>
     <string name="game_name">Nome do jogo</string>
+    <string name="games">Jogos</string>
+    <string name="change_game">Trocar jogo</string>
 
 </resources>

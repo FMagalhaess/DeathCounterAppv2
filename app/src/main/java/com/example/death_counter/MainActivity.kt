@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +14,8 @@ import com.example.death_counter.com.death_counter.common.GamesDatabase
 import com.example.death_counter.GameSelector
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
-    private val returnButton: Button by lazy { findViewById(R.id.return_to_games) }
+    private val changeGameBtn: Button by lazy { findViewById(R.id.change_game) }
+    private val returnBtn: Button by lazy { findViewById(R.id.return_button_main_activity) }
     private val nome:TextView by lazy { findViewById(R.id.death_counter) }
     private val addDeath:Button by lazy { findViewById(R.id.add_death) }
     private val subDeath: Button by lazy { findViewById(R.id.undo_deaths) }
@@ -21,6 +23,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var deathNumber: Int = 0
     private val actualGame:TextView by lazy { findViewById(R.id.actual_game) }
     private val games by lazy { GamesDatabase.getAll() }
+    private var actualGameId: Int = 0
+    private lateinit var adViewContainer:FrameLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -30,11 +34,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        adViewContainer = findViewById(R.id.admob_placeholder)
+        prepareAdPlaceholder()
         setGame()
-        returnButton.setOnClickListener(this)
+        changeGameBtn.setOnClickListener(this)
         addDeath.setOnClickListener(this)
         subDeath.setOnClickListener(this)
         restartDeath.setOnClickListener(this)
+        returnBtn.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -42,12 +49,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.add_death -> {addToCounter()}
             R.id.undo_deaths -> {subToCounter()}
             R.id.restart_deaths -> {restartCounter()}
-            R.id.return_to_games -> {returnToGamesList()}
+            R.id.change_game -> {returnToGamesList()}
+            R.id.return_button_main_activity -> {finish()}
         }
     }
     private fun addToCounter() {
         deathNumber += 1
         nome.text = deathNumber.toString()
+        GamesDatabase.changeDeathsOnState(actualGameId, deathNumber)
     }
     private fun subToCounter() {
         if(deathNumber > 0){
@@ -73,9 +82,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             deathNumber = deathCounter
         }
         else{
+            actualGameId = games[0].id
             actualGame.text = games[0].nome
             deathNumber = games[0].deaths
         }
         nome.text = deathNumber.toString()
+    }
+
+    private fun prepareAdPlaceholder() {
+        adViewContainer.setBackgroundColor(resources.getColor(android.R.color.holo_red_light))
     }
 }

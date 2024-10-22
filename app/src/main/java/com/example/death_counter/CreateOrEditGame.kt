@@ -8,6 +8,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.death_counter.com.death_counter.GameInputDTO
+import com.example.death_counter.com.death_counter.common.GamesDatabase
 import com.example.primeiroapp.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -27,7 +29,6 @@ class CreateOrEditGame : AppCompatActivity(), View.OnClickListener {
         enableEdgeToEdge()
         setContentView(R.layout.activity_create_or_edit_game)
 
-        // Configurando as views
         gameNameLayout = findViewById(R.id.game_name_input)
         deathsLayout = findViewById(R.id.deaths_input)
         gameNameEditText = gameNameLayout.editText as TextInputEditText
@@ -35,7 +36,6 @@ class CreateOrEditGame : AppCompatActivity(), View.OnClickListener {
         saveButton = findViewById(R.id.button2)
         deleteButton = findViewById(R.id.button3)
 
-        // Configurando a visualização de recuo do sistema
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.back_to_previous)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -46,38 +46,41 @@ class CreateOrEditGame : AppCompatActivity(), View.OnClickListener {
         saveButton.setOnClickListener { saveGame() }
         deleteButton.setOnClickListener { deleteGame() }
 
-        // Chama o método para preencher os campos com dados recebidos, se houver
         setNameAndDeaths()
     }
 
-    // Método para lidar com cliques
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.back_screen -> finish()
         }
     }
 
-    // Preencher o nome do jogo e mortes com base nos dados recebidos da Intent
     private fun setNameAndDeaths() {
-        val actualNameGame = intent.getStringExtra("gameName") ?: ""
+        val actualGameName = intent.getStringExtra("gameName") ?: ""
         val deathsOnGame = intent.getIntExtra("gameDeaths", 0)
 
-        gameNameEditText.setText(actualNameGame)
+        gameNameEditText.setText(actualGameName)
         deathsEditText.setText(deathsOnGame.toString())
     }
 
-    // Método para salvar o jogo (ainda não implementado)
     private fun saveGame() {
-        // Implementar a lógica para salvar o jogo
+
         val gameName = gameNameEditText.text.toString()
         val deaths = deathsEditText.text.toString().toIntOrNull() ?: 0
-
-        // Aqui você pode adicionar lógica para salvar os dados
+        // caso true, cria um jogo novo, caso falso, edita o jogo
+        val intent = Intent(baseContext, GameSelector::class.java)
+        startActivity(intent)
     }
-
-    // Método para deletar o jogo (ainda não implementado)
+    private fun createGame(gameName: String, deaths:Int) {
+        val toCreate = GameInputDTO(gameName, deaths)
+        GamesDatabase.crateGame(toCreate)
+    }
+    private fun editOrCreate() : Boolean {
+        val actualGameName = intent.getStringExtra("gameName")
+        val deathsOnGame = intent.getIntExtra("gameDeaths", -1)
+        return actualGameName != null && deathsOnGame != -1
+    }
     private fun deleteGame() {
-        // Implementar a lógica para deletar o jogo
         gameNameEditText.text?.clear()
         deathsEditText.text?.clear()
     }
