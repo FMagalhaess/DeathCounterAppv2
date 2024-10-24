@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         nome.text = deathNumber.toString()
         GamesDatabase.changeDeathsOnState(actualGameId, deathNumber)
     }
+
     private fun subToCounter() {
         if(deathNumber > 0){
             deathNumber -= 1
@@ -75,11 +76,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun setGame() {
         val gameName = intent.getStringExtra("gameName")
         val deathCounter = intent.getIntExtra("gameDeaths", -1)
-
-        if (gameName != null && deathCounter != -1)
+        val gameIdFromTable = intent.getIntExtra("gameId", -1)
+        if (gameName != null && deathCounter != -1 && gameIdFromTable != -1)
         {
             actualGame.text = gameName
             deathNumber = deathCounter
+            actualGameId = gameIdFromTable
         }
         else{
             actualGameId = games[0].id

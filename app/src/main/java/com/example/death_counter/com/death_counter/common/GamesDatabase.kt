@@ -26,12 +26,11 @@ object GamesDatabase {
         Games.add(toReturn)
     }
 
-    fun changeDeathsOnState(id:Int, deaths: Int) {
-        val actualGame = Games.find { it.id == id }
-        if (actualGame != null) {
-            actualGame.deaths = deaths
-            Games[id] = actualGame
+    fun changeDeathsOnState(id: Int, deaths: Int) {
+        val index = Games.indexOfFirst { it.id == id }
+        if (index != -1) {
+            Games[index].deaths = deaths
         }
-
     }
+
 }

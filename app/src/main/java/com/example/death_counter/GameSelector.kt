@@ -40,11 +40,13 @@ class GameSelector : AppCompatActivity(), View.OnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("gameName", game.nome)
             intent.putExtra("gameDeaths", game.deaths)
+            intent.putExtra("gameId", game.id)
             startActivity(intent)
         }, onEditClick = { game ->
             val intent = Intent(this, CreateOrEditGame::class.java)
             intent.putExtra("gameName", game.nome)
             intent.putExtra("gameDeaths", game.deaths)
+            intent.putExtra("gameId", game.id)
             startActivity(intent)
         })
 

@@ -67,18 +67,21 @@ class CreateOrEditGame : AppCompatActivity(), View.OnClickListener {
 
         val gameName = gameNameEditText.text.toString()
         val deaths = deathsEditText.text.toString().toIntOrNull() ?: 0
-        // caso true, cria um jogo novo, caso falso, edita o jogo
         val intent = Intent(baseContext, GameSelector::class.java)
-        startActivity(intent)
+        if (!hasItemToEdit()) {
+            createGame(gameName, deaths)
+            startActivity(intent)
+        }
     }
     private fun createGame(gameName: String, deaths:Int) {
         val toCreate = GameInputDTO(gameName, deaths)
         GamesDatabase.crateGame(toCreate)
     }
-    private fun editOrCreate() : Boolean {
+    private fun hasItemToEdit() : Boolean {
         val actualGameName = intent.getStringExtra("gameName")
         val deathsOnGame = intent.getIntExtra("gameDeaths", -1)
         return actualGameName != null && deathsOnGame != -1
+        //se retornar FALSE é para criar, se TRUE é para editar
     }
     private fun deleteGame() {
         gameNameEditText.text?.clear()
