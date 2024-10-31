@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.death_counter.com.death_counter.Game
 import com.example.death_counter.com.death_counter.GameInputDTO
 import com.example.death_counter.com.death_counter.common.GamesDatabase
 import com.example.primeiroapp.R
@@ -67,15 +68,28 @@ class CreateOrEditGame : AppCompatActivity(), View.OnClickListener {
 
         val gameName = gameNameEditText.text.toString()
         val deaths = deathsEditText.text.toString().toIntOrNull() ?: 0
-        val intent = Intent(baseContext, GameSelector::class.java)
+        val it = Intent(baseContext, GameSelector::class.java)
+        val actualGameId = intent.getIntExtra("gameId", -1)
         if (!hasItemToEdit()) {
             createGame(gameName, deaths)
-            startActivity(intent)
+            startActivity(it)
         }
+        if (hasItemToEdit()) {
+            val gameToEdit = GamesDatabase.getById(actualGameId)
+            if (gameToEdit != null) {
+                editGame(gameToEdit, gameName, deaths)
+                startActivity(it)
+            }
+        }
+    }
+    private fun editGame (game: Game, newGameName: String, newDeaths: Int) {
+        game.nome = newGameName
+        game.deaths = newDeaths
+        GamesDatabase.editGame(game)
     }
     private fun createGame(gameName: String, deaths:Int) {
         val toCreate = GameInputDTO(gameName, deaths)
-        GamesDatabase.crateGame(toCreate)
+        GamesDatabase.createGame(toCreate)
     }
     private fun hasItemToEdit() : Boolean {
         val actualGameName = intent.getStringExtra("gameName")

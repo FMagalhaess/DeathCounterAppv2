@@ -50,8 +50,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.undo_deaths -> {subToCounter()}
             R.id.restart_deaths -> {restartCounter()}
             R.id.change_game -> {returnToGamesList()}
-            R.id.return_button_main_activity -> {finish()}
+            R.id.return_button_main_activity -> {finishWithResult()}
         }
+    }
+    private fun finishWithResult() {
+        val resultIntent = Intent().apply {
+            putExtra("updatedGameId", actualGameId)
+        }
+        setResult(RESULT_OK, resultIntent)
+        finish()
     }
     private fun addToCounter() {
         deathNumber += 1
@@ -63,11 +70,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         if(deathNumber > 0){
             deathNumber -= 1
             nome.text = deathNumber.toString()
+            GamesDatabase.changeDeathsOnState(actualGameId, deathNumber)
         }
     }
     private fun restartCounter() {
         deathNumber = 0
         nome.text = deathNumber.toString()
+        GamesDatabase.changeDeathsOnState(actualGameId, deathNumber)
     }
     private fun returnToGamesList() {
         val intent = Intent(this, GameSelector::class.java)

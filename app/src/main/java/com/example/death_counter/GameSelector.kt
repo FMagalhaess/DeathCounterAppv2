@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -20,10 +22,15 @@ class GameSelector : AppCompatActivity(), View.OnClickListener {
     private val gamesList: RecyclerView by lazy { findViewById(R.id.selectGame) }
     private val addGameToList: Button by lazy { findViewById(R.id.add_game_to_list) }
     private val closeActivity: Button by lazy { findViewById(R.id.return_button_game_selector) }
+    private lateinit var gameAdapter: GameAdapter
+
+    private lateinit var mainActivityLauncher: ActivityResultLauncher<Intent>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_game_selector)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.back_to_previous)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -34,27 +41,41 @@ class GameSelector : AppCompatActivity(), View.OnClickListener {
 
         gamesList.setPadding(0, 140, 0, 640)
         gamesList.clipToPadding = false
+
         val games = GamesDatabase.getAll()
-        gamesList.layoutManager = LinearLayoutManager(baseContext)
-        gamesList.adapter = GameAdapter(games, onGameClick = { game ->
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("gameName", game.nome)
-            intent.putExtra("gameDeaths", game.deaths)
-            intent.putExtra("gameId", game.id)
-            startActivity(intent)
+        gameAdapter = GameAdapter(games, onGameClick = { game ->
+            val intent = Intent(this, MainActivity::class.java).apply {
+                putExtra("gameName", game.nome)
+                putExtra("gameDeaths", game.deaths)
+                putExtra("gameId", game.id)
+            }
+            mainActivityLauncher.launch(intent) // Inicia a atividade para resultado
         }, onEditClick = { game ->
-            val intent = Intent(this, CreateOrEditGame::class.java)
-            intent.putExtra("gameName", game.nome)
-            intent.putExtra("gameDeaths", game.deaths)
-            intent.putExtra("gameId", game.id)
+            val intent = Intent(this, CreateOrEditGame::class.java).apply {
+                putExtra("gameName", game.nome)
+                putExtra("gameDeaths", game.deaths)
+                putExtra("gameId", game.id)
+            }
             startActivity(intent)
+        },onFavoriteClick = { game ->
+            GamesDatabase.updateGameFavoriteStatus(game.id, game.favorite)
         })
 
+        gamesList.layoutManager = LinearLayoutManager(this)
+        gamesList.adapter = gameAdapter
+
+        mainActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val updatedGameId = result.data?.getIntExtra("updatedGameId", -1)
+                if (updatedGameId != null && updatedGameId != -1) {
+                    gameAdapter.notifyDataSetChanged()
+                }
+            }
+        }
     }
 
     override fun onClick(v: View?) {
-        when(v?.id)
-        {
+        when (v?.id) {
             R.id.add_game_to_list -> {
                 val intent = Intent(this, CreateOrEditGame::class.java)
                 startActivity(intent)
