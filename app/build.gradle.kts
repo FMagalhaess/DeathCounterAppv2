@@ -42,6 +42,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.material.v170)
+
 
 //    implementation("com.google.android.gms:play-services-ads:23.4.0")
 

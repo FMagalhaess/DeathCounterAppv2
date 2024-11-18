@@ -10,7 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.death_counter.com.death_counter.Game
 import com.example.death_counter.com.death_counter.GameInputDTO
-import com.example.death_counter.com.death_counter.common.GamesDatabase
+import com.example.death_counter.com.death_counter.data.database.GameDatabaseHelper
 import com.example.primeiroapp.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -24,6 +24,7 @@ class CreateOrEditGame : AppCompatActivity(), View.OnClickListener {
     private lateinit var deathsEditText: TextInputEditText
     private lateinit var saveButton: Button
     private lateinit var deleteButton: Button
+    private lateinit var gameDatabaseHelper: GameDatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,10 +47,10 @@ class CreateOrEditGame : AppCompatActivity(), View.OnClickListener {
         returnButton.setOnClickListener(this)
         saveButton.setOnClickListener { saveGame() }
         deleteButton.setOnClickListener { deleteGame() }
+        gameDatabaseHelper = GameDatabaseHelper(this)
 
         setNameAndDeaths()
     }
-
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.back_screen -> finish()
@@ -75,7 +76,7 @@ class CreateOrEditGame : AppCompatActivity(), View.OnClickListener {
             startActivity(it)
         }
         if (hasItemToEdit()) {
-            val gameToEdit = GamesDatabase.getById(actualGameId)
+            val gameToEdit = gameDatabaseHelper.getById(actualGameId)
             if (gameToEdit != null) {
                 editGame(gameToEdit, gameName, deaths)
                 startActivity(it)
@@ -85,11 +86,11 @@ class CreateOrEditGame : AppCompatActivity(), View.OnClickListener {
     private fun editGame (game: Game, newGameName: String, newDeaths: Int) {
         game.nome = newGameName
         game.deaths = newDeaths
-        GamesDatabase.editGame(game)
+        gameDatabaseHelper.editGame(game)
     }
     private fun createGame(gameName: String, deaths:Int) {
         val toCreate = GameInputDTO(gameName, deaths)
-        GamesDatabase.createGame(toCreate)
+        gameDatabaseHelper.createGame(toCreate)
     }
     private fun hasItemToEdit() : Boolean {
         val actualGameName = intent.getStringExtra("gameName")
